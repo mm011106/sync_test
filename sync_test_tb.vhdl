@@ -5,8 +5,8 @@ use IEEE.std_logic_unsigned.all;
 entity sim is
 end sim;
 
-architecture DDS_INIT of sim is
-component DDS_INIT
+architecture SEQUENCER of sim is
+component SEQUENCER
 	port(
 		-- inputs
 		nRES	: in std_logic;	-- This input MUST be Shumitt mode
@@ -34,7 +34,7 @@ constant PERIOD_A : time := 50 ns;
 constant PERIOD_B : time := 1500 us;
 
 begin
-	DUT:DDS_INIT
+	DUT:SEQUENCER
  		port map(
 
 			CLK => tb_CLK,
@@ -69,4 +69,4 @@ begin
 			wait;
 	end process;
 
-end DDS_INIT;
+end SEQUENCER;

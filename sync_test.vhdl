@@ -23,9 +23,9 @@ end SEQUENCER;
 
 architecture Behavioral of SEQUENCER is
 
-constant BURST_MARK : 	integer := 4;
-constant BURST_SPACE:	integer := 2;
-constant BURST_Q_WIDTH: integer := 3;
+constant BURST_MARK : 	integer := 2;
+constant BURST_SPACE:	integer := 1;
+constant BURST_Q_WIDTH: integer := 2;
 
 constant SYNC_PULSE_START: integer := 1;
 

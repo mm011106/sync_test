@@ -23,9 +23,9 @@ end SEQUENCER;
 
 architecture Behavioral of SEQUENCER is
 
-constant BURST_MARK : 	integer := 2;
-constant BURST_SPACE:	integer := 1;
-constant BURST_Q_WIDTH: integer := 2;
+constant BURST_MARK : 	integer := 4;
+constant BURST_SPACE:	integer := 2;
+constant BURST_Q_WIDTH: integer := 3;
 
 constant SYNC_PULSE_START: integer := 1;
 
@@ -36,13 +36,12 @@ constant ECD_Q_WIDTH:		integer	:=6;
 signal 	Q_BURST:		std_logic_vector(BURST_Q_WIDTH-1 downto 0);		--  burst wave counter
 signal 	Q_ECD:			std_logic_vector(ECD_Q_WIDTH-1 downto 0);
 
--- signal	Q_SEQ:		std_logic_vector(N+1 downto 0);		-- Sequience counter
--- signal 	ADD_COUNT:	std_logic_vector(1 downto 0);			-- Address counter for COMMAND words
--- signal	S_REG:		std_logic_vector(2**N-1 downto 0);	-- Output Register
+signal	BURST_SYNC:		std_logic:='0';	-- Sync signal (internal)
+signal	ECD_SYNC:		std_logic:='0';
+signal	ECD_CLK:			std_logic;
 
-signal	INT_SYNC:			std_logic;	-- Sync signal (internal)
-signal	ECD_CLK:		std_logic;
-
+signal	BURST_INH:		std_logic:='0';
+signal	ECD_INH:			std_logic:='0';
 
 
 begin
@@ -52,29 +51,54 @@ begin
 		port map    (EN => nRES , CLK => CLK, Q => Q_BURST);
 
 	ECD_COUNTER: entity work.COUNTER_INC
-		generic map (WIDTH => ECD_Q_WIDTH, COUNT => (ECD_NUMBER - 1) )
+		generic map (WIDTH => ECD_Q_WIDTH, COUNT => (ECD_NUMBER ) )
 		port map    (EN => nRES , CLK => ECD_CLK, Q => Q_ECD);
 
-	-- assart INT_SYNC when Q_BURST count more than SYNC_PULSE_START : determine the pulse width of SYNC
+	-- assart BURST_SYNC when Q_BURST count more than SYNC_PULSE_START : determine the pulse width of SYNC
 	process (Q_BURST) begin
-		if ( Q_BURST >= CONV_std_logic_vector(SYNC_PULSE_START,BURST_Q_WIDTH) ) then
-			INT_SYNC	<= '1';
+--		if ( Q_BURST >= CONV_std_logic_vector(SYNC_PULSE_START,BURST_Q_WIDTH-1) ) then
+		if ( Q_BURST >= SYNC_PULSE_START ) then	
+
+			BURST_SYNC	<= '1';
 		else
-			INT_SYNC <= '0';
+			BURST_SYNC <= '0';
 		end if;
 
-		if Q_BURST = CONV_std_logic_vector(0,BURST_Q_WIDTH) then
+--		if Q_BURST = CONV_std_logic_vector(0,BURST_Q_WIDTH-1) then
+		if Q_BURST = 0 then
+
 			ECD_CLK <='1';
 		else
 			ECD_CLK <='0';
 		end if;
+		
+--		if ( Q_BURST <= CONV_std_logic_vector(BURST_SPACE-1,BURST_Q_WIDTH-1) ) then
+		if ( Q_BURST <= BURST_SPACE-1 ) then
+			BURST_INH	<= '1';
+		else
+			BURST_INH 	<= '0';
+		end if;
 
 	end process;
-
---	INT_SYNC	<=	Q_BURST(1);
-
-	INH <= Q_BURST(0);
-	SYNC <= INT_SYNC;
-
+	
+	process (Q_ECD) begin
+--		if ( Q_ECD = CONV_std_logic_vector(ECD_NUMBER,ECD_Q_WIDTH) ) then
+		if ( Q_ECD = ECD_NUMBER ) then
+			ECD_SYNC <= '1';
+		else
+			ECD_SYNC <= '0';
+		end if;
+		
+--		if ( Q_ECD = CONV_std_logic_vector(ECD_NUMBER,ECD_Q_WIDTH) ) then
+		if ( Q_ECD = ECD_NUMBER ) then
+			ECD_INH	<= '1';
+		else
+			ECD_INH 	<= '0';
+		end if;
+		
+	end process;
+	
+	INH <= BURST_INH or ECD_INH;
+	SYNC <= BURST_SYNC and ECD_SYNC; 
 
 end Behavioral;

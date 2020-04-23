@@ -62,3 +62,4 @@ set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "NO HEAT SINK WITH STI
 set_global_assignment -name VHDL_FILE sync_test_tb.vhdl
 set_global_assignment -name VHDL_FILE sync_test.vhdl
 set_global_assignment -name VHDL_FILE counter_increment.vhdl
+set_global_assignment -name SDC_FILE SDC1.sdc

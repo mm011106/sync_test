@@ -38,3 +38,10 @@ constant SYNC_PULSE_START: integer := 1;
 
 - SYNC_PULSE_START: 同期パルスアサートタイミングのバースト波に対する位相（何番目の波から同期パルスをonにするか）
 - SYNCはこの開始位相からバーストの最後までアサートされる
+
+
+##### SYNCパルスタイミング例 (SYNC_PULSE_START:=2 ~ ２番目の波からスタート　＝　カウンタの１からスタート) 
+![タイミングチャート例](SYNC_timingExample.png )
+
+
+

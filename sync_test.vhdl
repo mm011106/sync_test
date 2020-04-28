@@ -53,7 +53,7 @@ constant BURST_Q_WIDTH: integer := 2;
 
 -- SYNC_PULSE_START: 同期パルスのバースト波に対する位相（0から数えて何番目の波から同期パルスをonにするか）
 -- SYNCはこの開始位相からバーストの最後までアサートされる
-constant SYNC_PULSE_START: integer := 1;
+constant SYNC_PULSE_START: integer := 2;
 
 --  internal signal
 signal 	Q_BURST:		std_logic_vector(BURST_Q_WIDTH-1 downto 0);		--  burst wave counter
@@ -79,7 +79,7 @@ begin
 
 	-- assart BURST_SYNC when Q_BURST count more than SYNC_PULSE_START : determine the pulse width of SYNC
 	process (Q_BURST) begin
-		if ( Q_BURST >= SYNC_PULSE_START ) then
+		if ( Q_BURST >= SYNC_PULSE_START-1 ) then
 			BURST_SYNC	<= '1';
 		else
 			BURST_SYNC	<= '0';

@@ -51,7 +51,7 @@ constant BURST_MARK : 	integer := 2;
 constant BURST_SPACE:		integer := 1;
 constant BURST_Q_WIDTH: integer := 2;
 
--- SYNC_PULSE_START: 同期パルスのバースト波に対する位相（0から数えて何番目の波から同期パルスをonにするか）
+-- SYNC_PULSE_START: 同期パルスのバースト波に対する位相（何番目の波から同期パルスをonにするか）
 -- SYNCはこの開始位相からバーストの最後までアサートされる
 constant SYNC_PULSE_START: integer := 2;
 

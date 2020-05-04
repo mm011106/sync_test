@@ -14,13 +14,14 @@
 --
 -- 	2020/4/23 Rev 0.5 Miyamoto
 -- 		コンパイラテスト、シミュレーションテスト完了
-
+--
+-- 	2020/5/4 REV 0.7 Miyamoto
+--			ライブラリを変更 numeric_std
 
 
 library IEEE;
 use IEEE.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
-use IEEE.std_logic_arith.all;
+use IEEE.numeric_std.all;
 
 entity SEQUENCER is
 	generic ( ECD_NUMBER:		integer :=50;
@@ -56,8 +57,8 @@ constant BURST_Q_WIDTH: integer := 2;
 constant SYNC_PULSE_START: integer := 2;
 
 --  internal signal
-signal 	Q_BURST:		std_logic_vector(BURST_Q_WIDTH-1 downto 0);		--  burst wave counter
-signal 	Q_ECD:			std_logic_vector(ECD_Q_WIDTH-1 downto 0);
+signal 	Q_BURST:		unsigned(BURST_Q_WIDTH-1 downto 0);		--  burst wave counter
+signal 	Q_ECD:			unsigned(ECD_Q_WIDTH-1 downto 0);
 
 signal	BURST_SYNC:		std_logic:='0';	-- Sync signal (internal)
 signal	ECD_SYNC:			std_logic:='0';
@@ -116,6 +117,6 @@ begin
 
 	INH 	<= BURST_INH or ECD_INH;
 	SYNC 	<= BURST_SYNC and ECD_SYNC;
-	ECD 	<= Q_ECD;
+	ECD 	<= std_logic_vector(Q_ECD);
 
 end Behavioral;
